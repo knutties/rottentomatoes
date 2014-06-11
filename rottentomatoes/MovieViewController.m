@@ -7,8 +7,11 @@
 //
 
 #import "MovieViewController.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface MovieViewController ()
+@property (weak, nonatomic) IBOutlet UITextView *movieDescriptionTextView;
+@property (weak, nonatomic) IBOutlet UIImageView *movieBGView;
 @end
 
 @implementation MovieViewController
@@ -30,24 +33,16 @@
     
     self.title = self.movieTitle;
     
-    UIScrollView *tempScrollView = (UIScrollView *)self.view;
-    tempScrollView.contentSize = CGSizeMake(320, 480);
+    //self.movieTitleLabel.text = self.movieTitle;
     
-    UILabel *movieDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 480.0f)];
+    self.movieDescriptionTextView.text = self.movieDescription;
+    
+    NSString *imageUrl = self.movieBgImageUrl;
+    
+    NSURL *url = [NSURL URLWithString:imageUrl];
+    
+    [self.movieBGView setImageWithURL:url];
 
-    
-    movieDescriptionLabel.text = self.movieDescription;
-
-    // set number of lines to zero
-    movieDescriptionLabel.numberOfLines = 0;
-    // resize label
-    [movieDescriptionLabel sizeToFit];
-    
-    // set scroll view size
-    tempScrollView.contentSize = CGSizeMake(tempScrollView.contentSize.width, movieDescriptionLabel.frame.size.height);
-    // add myLabel
-    [tempScrollView addSubview:movieDescriptionLabel];
-    
 }
 
 - (void)didReceiveMemoryWarning

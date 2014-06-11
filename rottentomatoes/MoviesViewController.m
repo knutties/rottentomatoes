@@ -16,6 +16,8 @@
 @interface MoviesViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *movies;
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) MBProgressHUD *hud;
 @end
 
 @implementation MoviesViewController
@@ -37,34 +39,51 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=3aw6qppb5a4efy3mn9q5twth";
     
-    // show loading icon
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Loading";
-    
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        // NSLog(@"%@", object);
-        
-        [hud hide:YES];
-        self.movies = object[@"movies"];
-        [self.tableView reloadData];
-        
-    }];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil]
          forCellReuseIdentifier:@"MovieCell"];
     
     self.tableView.rowHeight = 120;
+    
+    // show loading icon
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.hud.labelText = @"Loading";
+    
+    [self reloadMoviesFromServer];
+    
+    UITableViewController *tableViewController = [[UITableViewController alloc] init];
+    tableViewController.tableView = self.tableView;
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(reloadMoviesFromServer) forControlEvents:UIControlEventValueChanged];
+    tableViewController.refreshControl = self.refreshControl;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)reloadMoviesFromServer
+{
+    NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=3aw6qppb5a4efy3mn9q5twth";
+    
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        //NSLog(@"%@", object);
+        
+
+        self.movies = object[@"movies"];
+        [self.tableView reloadData];
+    }];
+
+    
+    [self.refreshControl endRefreshing];
+    [self.hud hide:YES];
 }
 
 #pragma mark - our table view implementation
@@ -101,11 +120,14 @@
     
     MovieCell *selectedCell = [tableView cellForRowAtIndexPath: indexPath];
     
+    NSDictionary *movie = self.movies[indexPath.row];
     
     MovieViewController *mvc = [[MovieViewController alloc] init];
     mvc.movieTitle = selectedCell.titleLabel.text;
     mvc.movieDescription = selectedCell.synopsisLabel.text;
+    mvc.movieBgImageUrl = movie[@"posters"][@"detailed"];
     [self.navigationController pushViewController:mvc animated:YES];
 }
+
 
 @end
