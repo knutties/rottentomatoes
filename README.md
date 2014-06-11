@@ -1,7 +1,7 @@
 rottentomatoes
 ==============
 
-Time spent: 8 hours spent in total
+Time spent: about 8 hours spent in total
 
 Completed user stories:
 
