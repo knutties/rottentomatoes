@@ -1,19 +1,14 @@
 rottentomatoes
 ==============
 
-Stories Done
-------------
+Time spent: 8 hours spent in total
 
-* User can view a list of movies from Rotten Tomatoes.  Poster images must be loading asynchronously.
+Completed user stories:
 
-* User sees loading state while waiting for movies API.  You can use one of the 3rd party libraries here.
+ * [x] Required: User can view a list of latest box office movies including title, image, synopsis
+ * [x] Required: User can click on a movie in the list to bring up a details page with additional information such as synopsis
+ * [x] Required: User can pull to refresh the movie list.
+ * [x] Required: User sees loading state while waiting for movies API.  You can use one of the 3rd party libraries here.
+ * [x] Must use Cocoapods: AFNetworking
 
-* User can view movie details by tapping on a cell
-
-* User can pull to refresh the movie list.
-
-Stories TODO
-------------
-
-* User sees error message when there's a networking error.  You may not use UIAlertView to display the error.  See this screenshot for what the error message should look like: network error screenshot.
-
+![Demo] (screencast.gif)
