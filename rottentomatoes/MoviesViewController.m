@@ -17,7 +17,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *movies;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (weak, nonatomic) IBOutlet UILabel *errorMessageView;
 @property (strong, nonatomic) MBProgressHUD *hud;
+@property (nonatomic) int loadCount;
 @end
 
 @implementation MoviesViewController
@@ -28,6 +30,7 @@
     if (self) {
         // Custom initialization
         self.title = @"Movies";
+        self.loadCount = 1;
     }
     return self;
 }
@@ -39,7 +42,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    
+    self.errorMessageView.hidden = YES;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MovieCell" bundle:nil]
          forCellReuseIdentifier:@"MovieCell"];
@@ -70,15 +73,31 @@
 {
     NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=3aw6qppb5a4efy3mn9q5twth";
     
+    NSLog(@"%d", self.loadCount);
+    if(self.loadCount % 2 == 0) {
+        // set invalid url to show error message
+        url = @"foo-bar";
+    }
+    
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        //NSLog(@"%@", object);
+        
+        self.loadCount++;
+        NSLog(@"%@", connectionError);
+        
+        if(connectionError) {
+            self.errorMessageView.hidden = NO;
+            self.errorMessageView.text = @"Network error, please pull to retry.";
+        } else {
+            self.errorMessageView.hidden = YES;
+            id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            //NSLog(@"%@", object);
         
 
-        self.movies = object[@"movies"];
-        [self.tableView reloadData];
+            self.movies = object[@"movies"];
+            [self.tableView reloadData];
+        }
     }];
 
     
@@ -122,11 +141,13 @@
     
     NSDictionary *movie = self.movies[indexPath.row];
     
+
     MovieViewController *mvc = [[MovieViewController alloc] init];
     mvc.movieTitle = selectedCell.titleLabel.text;
     mvc.movieDescription = selectedCell.synopsisLabel.text;
     mvc.movieBgImageUrl = movie[@"posters"][@"detailed"];
     [self.navigationController pushViewController:mvc animated:YES];
+
 }
 
 
