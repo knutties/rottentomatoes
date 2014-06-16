@@ -73,7 +73,7 @@
 {
     NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=3aw6qppb5a4efy3mn9q5twth";
     
-    NSLog(@"%d", self.loadCount);
+    // NSLog(@"count of loads %d", self.loadCount);
     if(self.loadCount % 2 == 0) {
         // set invalid url to show error message
         url = @"foo-bar";
@@ -84,7 +84,8 @@
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         
         self.loadCount++;
-        NSLog(@"%@", connectionError);
+        // NSLog(@"%@", connectionError);
+        // NSLog(@"%@", data);
         
         if(connectionError) {
             self.errorMessageView.hidden = NO;
@@ -92,7 +93,7 @@
         } else {
             self.errorMessageView.hidden = YES;
             id object = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            //NSLog(@"%@", object);
+            // NSLog(@"%@", object);
         
 
             self.movies = object[@"movies"];
@@ -133,7 +134,7 @@
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Navigation Controller: %@", self.navigationController);
+    // NSLog(@"Navigation Controller: %@", self.navigationController);
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
