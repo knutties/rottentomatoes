@@ -4,7 +4,8 @@ rottentomatoes
 Time spent: (week 1) about 8 hours spent in total
 Time spent: (week 2) about 8 hours spent in total
 
-Completed user stories:
+Completed user stories
+----------------------
 
  * [x] Required: User can view a list of latest box office movies including title, image, synopsis
  * [x] Required: User can click on a movie in the list to bring up a details page with additional information such as synopsis
@@ -17,9 +18,18 @@ Completed user stories:
  * [x] Optional: All images fade in.
  * [x] Optional: For the large poster, load the low-res image first, switch to high-res when complete
 
-Incomplete user stories:
+![Demo] (screencast.gif)
+
+Incomplete user stories
+-----------------------
  * Optional: Customize the navigation bar.
  * Optional: All images should be cached in memory and disk. In other words, images load immediately upon cold start.
  * Optional: Add a search bar.
 
-![Demo] (screencast.gif)
+
+Libraries used
+--------------
+1. AFNetworking
+2. MBProgressHUD
+
+
