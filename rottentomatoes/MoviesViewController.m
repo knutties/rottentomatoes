@@ -144,9 +144,22 @@
     
     NSString *imageUrl = movie[@"posters"][@"thumbnail"];
     
-    NSURL *url = [NSURL URLWithString:imageUrl];
+    // NSURL *url = [NSURL URLWithString:imageUrl];
 
-    [cell.posterImgView setImageWithURL:url];
+    // [cell.posterImgView setImageWithURL:url];
+    
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL                                                           URLWithString:imageUrl] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    [cell.posterImgView setImageWithURLRequest:urlRequest placeholderImage:[UIImage imageNamed:@"1x1"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        cell.posterImgView.image = image;
+        [UIView animateWithDuration:1.0 animations:^{
+            cell.posterImgView.alpha = 1.0;
+        }];
+        
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+        NSLog(@"Request failed with error: %@", error);
+    }];
+    
     
     return cell;
 }
@@ -169,7 +182,8 @@
     MovieViewController *mvc = [[MovieViewController alloc] init];
     mvc.movieTitle = selectedCell.titleLabel.text;
     mvc.movieDescription = selectedCell.synopsisLabel.text;
-    mvc.movieBgImageUrl = movie[@"posters"][@"detailed"];
+    mvc.movieBgThumbnailImageUrl = movie[@"posters"][@"thumbnail"];
+    mvc.movieBgDetailedImageUrl = movie[@"posters"][@"original"];
     [self.navigationController pushViewController:mvc animated:YES];
 
 }

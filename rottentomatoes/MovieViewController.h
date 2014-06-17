@@ -13,6 +13,6 @@
 @property (nonatomic) NSString *movieTitle;
 @property (nonatomic) NSString *moviePoster;
 @property (nonatomic) NSString *movieDescription;
-@property (nonatomic) NSString *movieBgImageUrl;
-
+@property (nonatomic) NSString *movieBgThumbnailImageUrl;
+@property (nonatomic) NSString *movieBgDetailedImageUrl;
 @end

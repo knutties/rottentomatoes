@@ -1,7 +1,8 @@
 rottentomatoes
 ==============
 
-Time spent: about 8 hours spent in total
+Time spent: (week 1) about 8 hours spent in total
+Time spent: (week 2) about 8 hours spent in total
 
 Completed user stories:
 
@@ -13,12 +14,12 @@ Completed user stories:
  * [x] Require: Must use Cocoapods: AFNetworking
  * [x] Optional: Add a tab bar for Box Office and DVD.
  * [x] Optional: Customize the highlight and selection effect of the cell.
+ * [x] Optional: All images fade in.
+ * [x] Optional: For the large poster, load the low-res image first, switch to high-res when complete
 
 Incomplete user stories:
- * Optional: All images fade in.
- * Optional: For the large poster, load the low-res image first, switch to high-res when complete
- * Optional: All images should be cached in memory and disk. In other words, images load immediately upon cold start.
  * Optional: Customize the navigation bar.
+ * Optional: All images should be cached in memory and disk. In other words, images load immediately upon cold start.
  * Optional: Add a search bar.
 
 ![Demo] (screencast.gif)

@@ -37,9 +37,14 @@
     
     self.title = self.movieTitle;
     
-    NSString *imageUrl = self.movieBgImageUrl;
-    NSURL *url = [NSURL URLWithString:imageUrl];
-    [self.movieBGView setImageWithURL:url] ;
+    // set thumbnail for faster download
+    NSString *imageURL = self.movieBgThumbnailImageUrl;
+    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
+    self.movieBGView.image = [UIImage imageWithData:imageData];
+    
+    // load high res image
+    NSURL *detailUrl = [NSURL URLWithString:self.movieBgDetailedImageUrl];
+    [self.movieBGView setImageWithURL:detailUrl];
     
     // setup movie title
     self.movieTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 300, 50)];
