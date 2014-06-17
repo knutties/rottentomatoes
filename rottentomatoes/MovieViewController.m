@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UIScrollView *movieDetailsScrollView;
 @property (strong, nonatomic) UILabel *movieTitleLabel;
 @property (strong, nonatomic) UILabel *movieSynopsisLabel;
+@property (strong, nonatomic) UIView *movieContentView;
 @end
 
 @implementation MovieViewController
@@ -56,13 +57,20 @@
     self.movieSynopsisLabel.numberOfLines = 0;
     [self.movieSynopsisLabel sizeToFit];
 
+    float totalHeight = self.movieTitleLabel.frame.size.height + self.movieSynopsisLabel.frame.size.height + 300.;
+    
+    // setup movie content view
+    self.movieContentView = [[UIView alloc] initWithFrame:CGRectMake(0, 200, 320, totalHeight)];
+    [self.movieContentView addSubview:self.movieTitleLabel];
+    [self.movieContentView addSubview:self.movieSynopsisLabel];
+    self.movieContentView.backgroundColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:0.5];
+    
     // setup scrollview
-    self.movieDetailsScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 200, 320, 320)];
-    self.movieDetailsScrollView.backgroundColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:0.5];
-    [self.movieDetailsScrollView addSubview:self.movieTitleLabel];
-    [self.movieDetailsScrollView addSubview:self.movieSynopsisLabel];
-    float totalHeight = self.movieTitleLabel.frame.size.height + self.movieSynopsisLabel.frame.size.height + 100.;
-    [self.movieDetailsScrollView setContentSize:CGSizeMake(320, totalHeight)];
+    CGRect fullScreenRect=[[UIScreen mainScreen] applicationFrame];
+    self.movieDetailsScrollView = [[UIScrollView alloc]initWithFrame:fullScreenRect];
+    [self.movieDetailsScrollView addSubview:self.movieContentView];
+    [self.movieDetailsScrollView setContentSize:self.movieContentView.frame.size];
+
 
     // add scrollview to view
     [self.view addSubview:self.movieDetailsScrollView];
