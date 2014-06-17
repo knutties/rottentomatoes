@@ -17,11 +17,27 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    MoviesViewController *vc = [[MoviesViewController alloc] init];
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    self.window.rootViewController = nvc;
+    
+    MoviesViewController *boxOfficeVC = [[MoviesViewController alloc] init];
+    boxOfficeVC.dataUrl = @"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=3aw6qppb5a4efy3mn9q5twth";
+    UINavigationController *navBoxOfficeVC = [[UINavigationController alloc] initWithRootViewController:boxOfficeVC];
+    navBoxOfficeVC.tabBarItem.title = @"Box Office";
+    navBoxOfficeVC.tabBarItem.image =  [UIImage imageNamed:@"ticket_icon"];
 
     
+    MoviesViewController *dvdVC = [[MoviesViewController alloc] init];
+    dvdVC.dataUrl = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=3aw6qppb5a4efy3mn9q5twth";
+    UINavigationController *navDVDVC = [[UINavigationController alloc] initWithRootViewController:dvdVC];
+    navDVDVC.tabBarItem.title = @"DVD";
+    navDVDVC.tabBarItem.image =  [UIImage imageNamed:@"dvd_icon"];
+    
+    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    NSArray* controllers = [NSArray arrayWithObjects: navBoxOfficeVC, navDVDVC, nil];
+    tabBarController.viewControllers = controllers;
+    
+    self.window.rootViewController = tabBarController;
+
     [self.window makeKeyAndVisible];
     return YES;
 }

@@ -31,6 +31,7 @@
         // Custom initialization
         self.title = @"Movies";
         self.loadCount = 1;
+        self.dataUrl = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=3aw6qppb5a4efy3mn9q5twth";
     }
     return self;
 }
@@ -71,7 +72,7 @@
 
 - (void)reloadMoviesFromServer
 {
-    NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=3aw6qppb5a4efy3mn9q5twth";
+    NSString *url = self.dataUrl;
     
     // NSLog(@"count of loads %d", self.loadCount);
     if(self.loadCount % 2 == 0) {
