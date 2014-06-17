@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *errorMessageView;
 @property (strong, nonatomic) MBProgressHUD *hud;
 @property (nonatomic) int loadCount;
+@property (nonatomic) NSIndexPath *selectedIndexPath;
 @end
 
 @implementation MoviesViewController
@@ -107,6 +108,22 @@
     [self.hud hide:YES];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    NSLog(@"view will disappear");
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+}
+
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"view will appear");
+    if(self.selectedIndexPath != nil) {
+        [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
+    }
+}
+
+
 #pragma mark - our table view implementation
 
 - (int) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -118,7 +135,7 @@
     // NSLog(@"cell for row %d", indexPath.row);
     
     MovieCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell"];
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     
     NSDictionary *movie = self.movies[indexPath.row];
     
@@ -137,13 +154,18 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // NSLog(@"Navigation Controller: %@", self.navigationController);
     
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
     MovieCell *selectedCell = [tableView cellForRowAtIndexPath: indexPath];
     
+    // save index path to restore on pop of view controller
+    self.selectedIndexPath = indexPath;
+    
+    // change selected cell background color
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor yellowColor];
+    [selectedCell setSelectedBackgroundView:bgColorView];
+
     NSDictionary *movie = self.movies[indexPath.row];
     
-
     MovieViewController *mvc = [[MovieViewController alloc] init];
     mvc.movieTitle = selectedCell.titleLabel.text;
     mvc.movieDescription = selectedCell.synopsisLabel.text;
